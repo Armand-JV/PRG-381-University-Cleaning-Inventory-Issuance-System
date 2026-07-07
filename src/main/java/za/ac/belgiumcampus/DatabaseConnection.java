@@ -11,14 +11,15 @@ public class DatabaseConnection {
 
     private static final Properties CONFIG = loadConfigProperties();
     private static final String DB_NAME = getConfigValue("DB_NAME", "cleaning_inventory");
-    private static final String DB_IP = getConfigValue("DB_IP", "localhost");
-    private static final String PASSWORD = getConfigValue("DB_PASSWORD", "");
+    private static final String DB_USER = getConfigValue("DB_USER", "cleaning_admin");
+    private static final String DB_PASSWORD = getConfigValue("DB_PASSWORD", "");
+    private static final String DB_IP = getConfigValue("DB_IP", "");
+    private static final String DB_PORT = getConfigValue("DB_PORT", "5432");
 
-    private static final String URL = "jdbc:postgresql://" + DB_IP + ":5432/" + DB_NAME;
-    private static final String USER = "cleaning_admin";
+    private static final String URL = "jdbc:postgresql://" + DB_IP + ":" + DB_PORT + "/" + DB_NAME;
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return DriverManager.getConnection(URL, DB_USER, DB_PASSWORD);
     }
 
     private static String getConfigValue(String key, String defaultValue) {

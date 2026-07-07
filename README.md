@@ -20,7 +20,7 @@ mvn install
 ```
 then
 ```
-run mvn compile 
+mvn compile 
 ```
 
 After that add the code to the application where fits 

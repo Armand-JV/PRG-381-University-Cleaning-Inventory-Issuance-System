@@ -19,12 +19,8 @@ public class DatabaseConnection {
     private static final String DB_IP = getRequiredConfigValue("DB_IP");
     private static final String DB_PORT = getConfigValue("DB_PORT", "5432");
 
-    // Defaults to "require" now that the DB is reachable over the open internet
-    // via port-forwarding rather than a VPN/LAN.
     private static final String DB_SSLMODE = getConfigValue("DB_SSLMODE", "require");
 
-    // Prevents the app hanging indefinitely if the forwarded port is
-    // unreachable (router down, ISP change, etc).
     private static final String DB_CONNECT_TIMEOUT = getConfigValue("DB_CONNECT_TIMEOUT", "10");
 
     private static final String URL = String.format(

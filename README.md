@@ -25,6 +25,10 @@ run mvn compile
 
 After that add the code to the application where fits 
 
+# Very Important 
+Creat a new folder under /src/main called "resources" then create a file called config.properties and copy the secrets(Ask Armand for the secrets) into that file.
+
+The database should connect after that(via runnning Main.java)
 
 
 

@@ -19,7 +19,17 @@ public class DatabaseConnection {
     private static final String DB_IP = getRequiredConfigValue("DB_IP");
     private static final String DB_PORT = getConfigValue("DB_PORT", "5432");
 
-    private static final String URL = String.format("jdbc:postgresql://%s:%s/%s", DB_IP, DB_PORT, DB_NAME);
+    // Defaults to "require" now that the DB is reachable over the open internet
+    // via port-forwarding rather than a VPN/LAN.
+    private static final String DB_SSLMODE = getConfigValue("DB_SSLMODE", "require");
+
+    // Prevents the app hanging indefinitely if the forwarded port is
+    // unreachable (router down, ISP change, etc).
+    private static final String DB_CONNECT_TIMEOUT = getConfigValue("DB_CONNECT_TIMEOUT", "10");
+
+    private static final String URL = String.format(
+            "jdbc:postgresql://%s:%s/%s?sslmode=%s&connectTimeout=%s",
+            DB_IP, DB_PORT, DB_NAME, DB_SSLMODE, DB_CONNECT_TIMEOUT);
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, DB_USER, DB_PASSWORD);

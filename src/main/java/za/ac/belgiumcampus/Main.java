@@ -8,6 +8,8 @@ public class Main {
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (conn != null && !conn.isClosed()) {
                 System.out.println("Database connection successful.");
+                DatabaseInitializer.runMigrations(conn);
+                System.out.println("Database schema is up to date.");
             } else {
                 System.out.println("Database connection failed.");
             }

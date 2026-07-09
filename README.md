@@ -89,3 +89,43 @@ private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {
     // TODO: refreshTable();
 }
 ```
+# Database Migrations
+
+SQL migration scripts for the University Cleaning Inventory & Issuance System (PostgreSQL).
+
+
+## Files (run in this order)
+
+| File | Table(s) / Purpose |
+|---|---|
+| `001_create_users.sql` | `users` — staff accounts, roles, login |
+| `002_create_suppliers.sql` | `suppliers` — supplier contact details |
+| `003_create_departments.sql` | `departments` — lookup for cleaner assignment |
+| `004_create_materials.sql` | `materials` — inventory, quantity, reorder level |
+| `005_create_cleaners.sql` | `cleaners` — cleaning staff records |
+| `006_create_stock_issuances.sql` | `stock_issuances` — issuance history + trigger that deducts stock and blocks over-issuing |
+| `007_updated_at_triggers.sql` | Keeps `updated_at` columns current on every update |
+| `008_create_views.sql` | Views for Dashboard summary and Reports (low stock, issuance history, material usage) |
+| `run_all.sql` | Runs all of the above in order via `psql` |
+
+
+## Entity relationships
+
+```
+users            (standalone — staff who log in / issue stock)
+suppliers ──┐
+            ├─▶ materials ──▶ stock_issuances ◀── cleaners
+departments ────────────────────────────────▶ cleaners
+```
+
+- A **material** optionally belongs to a **supplier**.
+- A **cleaner** optionally belongs to a **department**.
+- A **stock_issuance** links one **material** + one **cleaner**, and optionally records which **user** processed it.
+
+## Business rules enforced at the database level
+
+- Duplicate `username` / `email` on `users` → blocked by unique constraints.
+- Negative stock (`materials.quantity`, `reorder_level`) → blocked by `CHECK` constraints.
+- Issuing more stock than is available → blocked by the trigger in `006_create_stock_issuances.sql`, which also auto-deducts stock on every issuance.
+- Low-stock items, dashboard counts, issuance history, and material usage are all pre-built as views in `008_create_views.sql` so your DAO/report code can just `SELECT * FROM vw_...`.
+

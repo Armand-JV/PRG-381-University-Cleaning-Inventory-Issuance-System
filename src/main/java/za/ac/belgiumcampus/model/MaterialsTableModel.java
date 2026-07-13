@@ -1,6 +1,4 @@
-package za.ac.belgiumcampus.view;
-
-import za.ac.belgiumcampus.model.Material;
+package za.ac.belgiumcampus.model;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

@@ -163,11 +163,9 @@ public class LoginFrame extends javax.swing.JFrame {
         //   dispose();
         // Passing the whole `user` object (not just the username) means
         // MainFrame can check user.getRole() for role-based access control.
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Login successful! Welcome, " + user.getFullName() + " (" + user.getRole() + ")\n"
-                + "MainFrame not yet built - stopping here for now.",
-                "Login Successful", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-    //GEN-LAST:event_btnLoginActionPerformed
+        new MainFrame(user).setVisible(true);
+        dispose();
+                                            
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed

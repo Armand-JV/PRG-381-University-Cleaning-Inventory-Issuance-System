@@ -4,6 +4,10 @@
  */
 package za.ac.belgiumcampus.view;
 
+import za.ac.belgiumcampus.model.User;
+import za.ac.belgiumcampus.dao.UserDAO;
+import za.ac.belgiumcampus.util.PasswordUtil;
+
 /**
  *
  * @author user
@@ -11,7 +15,7 @@ package za.ac.belgiumcampus.view;
 public class LoginFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginFrame.class.getName());
-
+    private final UserDAO userDAO = new UserDAO();
     /**
      * Creates new form LoginFrame
      */
@@ -59,7 +63,6 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jLabel4.setText("Password");
 
-        jPasswordField1.setText("jPasswordField1");
         jPasswordField1.setName("txtPassword"); // NOI18N
 
         jButton1.setText("Register");
@@ -72,7 +75,8 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jLabel5.setForeground(new java.awt.Color(255, 0, 0));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Status");
+        jLabel5.setText("  ");
+        jLabel5.setToolTipText("");
         jLabel5.setName("lblStatus"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -137,20 +141,39 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String username = jTextField1.getText().trim();
-    String password = new String(jPasswordField1.getPassword());
+        String password = new String(jPasswordField1.getPassword());
+ 
+        if (username.isEmpty() || password.isEmpty()) {
+            jLabel5.setText("Please enter username and password");
+            return;
+        }
+ 
+        User user = userDAO.getUserByUsername(username);
+ 
+        if (user == null || !PasswordUtil.verify(password, user.getPasswordHash())) {
+            jLabel5.setText("Invalid username or password");
+            return;
+        }
 
-    if (username.isEmpty() || password.isEmpty()) {
-        jLabel5.setText("Please enter username and password");
-        return;
-    }
-
-    jLabel5.setText("Login button clicked - Controller coming soon");
+    jLabel5.setText(" ");
     
-    // Later we will open Dashboard here
+    // TODO: once MainFrame exists in za.ac.belgiumcampus.view, replace the
+        // line below with:
+        //   new MainFrame(user).setVisible(true);
+        //   dispose();
+        // Passing the whole `user` object (not just the username) means
+        // MainFrame can check user.getRole() for role-based access control.
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Login successful! Welcome, " + user.getFullName() + " (" + user.getRole() + ")\n"
+                + "MainFrame not yet built - stopping here for now.",
+                "Login Successful", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    //GEN-LAST:event_btnLoginActionPerformed
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         new RegisterFrame().setVisible(true);
+        dispose();
+    
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     /**

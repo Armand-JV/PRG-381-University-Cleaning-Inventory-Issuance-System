@@ -4,6 +4,9 @@
  */
 package za.ac.belgiumcampus.view;
 
+import za.ac.belgiumcampus.model.User;
+import za.ac.belgiumcampus.dao.UserDAO;
+import za.ac.belgiumcampus.util.PasswordUtil;
 /**
  *
  * @author user
@@ -11,7 +14,7 @@ package za.ac.belgiumcampus.view;
 public class RegisterFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegisterFrame.class.getName());
-
+    private final UserDAO userDAO = new UserDAO();
     /**
      * Creates new form RegisterFrame
      */
@@ -204,19 +207,39 @@ public class RegisterFrame extends javax.swing.JFrame {
         return;
     }
 
-    // TODO (DB integration): once UserDAO exists, replace the block below with:
-    //   if (userDAO.usernameExists(username)) { show "Username taken" error; return; }
-    //   if (userDAO.emailExists(email)) { show "Email already registered" error; return; }
-    //   User newUser = new User(fullName, username, email, password, role);
-    //   userDAO.registerUser(newUser);
+    if (userDAO.usernameExists(username)) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "That username is already taken.", "Registration Failed",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-    javax.swing.JOptionPane.showMessageDialog(this,
-            "Registration successful! (stub - not yet saved to database)",
-            "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-    dispose();
+    if (userDAO.emailExists(email)) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "That email is already registered.", "Registration Failed",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String passwordHash = PasswordUtil.hash(password);
+    User newUser = new User(fullName, username, email, passwordHash, role);
+    boolean success = userDAO.registerUser(newUser);
+
+    if (success) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Registration successful!", "Success",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        new LoginFrame().setVisible(true);
+        dispose();
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Registration failed. Please try again.", "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        new LoginFrame().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 

@@ -1,20 +1,30 @@
 package za.ac.belgiumcampus;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import za.ac.belgiumcampus.view.LoginFrame;
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            if (conn != null && !conn.isClosed()) {
-                System.out.println("Database connection successful.");
-                DatabaseInitializer.runMigrations(conn);
-                System.out.println("Database schema is up to date.");
-            } else {
-                System.out.println("Database connection failed.");
-            }
-        } catch (SQLException e) {
-            System.err.println("Database connection failed: " + e.getMessage());
+        try {
+            // Set nice look and feel
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+            // Initialize Database
+            System.out.println("Initializing database...");
+            DatabaseInitializer.runMigrations(DatabaseConnection.getConnection());
+            System.out.println("Database ready.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                "Database initialization failed: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         }
+
+        // Launch Login Screen
+        SwingUtilities.invokeLater(() -> {
+            new LoginFrame().setVisible(true);
+        });
     }
 }

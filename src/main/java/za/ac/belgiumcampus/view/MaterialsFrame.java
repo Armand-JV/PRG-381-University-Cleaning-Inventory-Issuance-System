@@ -4,6 +4,7 @@
  */
 package za.ac.belgiumcampus.view;
 
+import za.ac.belgiumcampus.model.MaterialsTableModel;
 import za.ac.belgiumcampus.dao.MaterialDAO;
 import za.ac.belgiumcampus.dao.SupplierDAO;
 import za.ac.belgiumcampus.exception.NegativeStockException;

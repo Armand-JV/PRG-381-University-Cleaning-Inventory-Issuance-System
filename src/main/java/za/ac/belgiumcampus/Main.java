@@ -1,30 +1,41 @@
 package za.ac.belgiumcampus;
 
-import za.ac.belgiumcampus.view.LoginFrame;
-import javax.swing.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            // Set nice look and feel
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            if (conn != null && !conn.isClosed()) {
+                System.out.println("Database connection successful.");
+                DatabaseInitializer.runMigrations(conn);
+                System.out.println("Database schema is up to date.");
 
-            // Initialize Database
-            System.out.println("Initializing database...");
-            DatabaseInitializer.runMigrations(DatabaseConnection.getConnection());
-            System.out.println("Database ready.");
+                // Use SupplierDAO
+                SupplierDAO supplierDAO = new SupplierDAO(conn);
+                supplierDAO.listSuppliers();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, 
-                "Database initialization failed: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
+                // Use CleanerDAO
+                CleanerDAO cleanerDAO = new CleanerDAO(conn);
+                cleanerDAO.listCleaners();
+
+                MaterialDAO materialDAO = new MaterialDAO(conn);
+                materialDAO.listMaterials();
+
+                UserDAO userDAO = new UserDAO(conn);
+                userDAO.listUsers();
+
+                StockIssuanceDAO issuanceDAO = new StockIssuanceDAO(conn);
+                issuanceDAO.listIssuances();
+
+                DepartmentDAO departmentDAO = new DepartmentDAO(conn);
+                departmentDAO.listDepartments();
+
+            } else {
+                System.out.println("Database connection failed.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Database connection failed: " + e.getMessage());
         }
-
-        // Launch Login Screen
-        SwingUtilities.invokeLater(() -> {
-            new LoginFrame().setVisible(true);
-        });
     }
 }

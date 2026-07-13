@@ -1,4 +1,4 @@
-package za.ac.belgiumcampus;
+package za.ac.belgiumcampus.dao;
 
 import java.sql.*;
 

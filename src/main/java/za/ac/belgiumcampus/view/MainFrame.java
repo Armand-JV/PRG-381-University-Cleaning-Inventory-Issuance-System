@@ -112,8 +112,14 @@ public class MainFrame extends JFrame {
         // TODO (Member 4): replace with the real DashboardPanel
         contentPanel.add(placeholderPanel("Dashboard"), CARD_DASHBOARD);
 
-        // TODO (Member 2): replace with the real MaterialsPanel
-        contentPanel.add(placeholderPanel("Materials"), CARD_MATERIALS);
+        // Use the existing MaterialsFrame UI inside the card (falls back to placeholder if it fails)
+        try {
+            MaterialsFrame materialsFrame = new MaterialsFrame();
+            contentPanel.add(materialsFrame.getContentPane(), CARD_MATERIALS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            contentPanel.add(placeholderPanel("Materials (failed to load)"), CARD_MATERIALS);
+        }
 
         // TODO (Member 3): replace with the real SuppliersPanel
         contentPanel.add(placeholderPanel("Suppliers"), CARD_SUPPLIERS);

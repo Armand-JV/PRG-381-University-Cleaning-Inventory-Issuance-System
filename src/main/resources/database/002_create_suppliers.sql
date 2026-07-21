@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS suppliers (
     contact_person  VARCHAR(100),
     phone           VARCHAR(20),
     email           VARCHAR(150),
-    address         VARCHAR(255),
+    location         VARCHAR(255),
     is_active       BOOLEAN         NOT NULL DEFAULT TRUE,
     created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,

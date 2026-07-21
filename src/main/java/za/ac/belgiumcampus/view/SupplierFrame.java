@@ -4,6 +4,13 @@
  */
 package za.ac.belgiumcampus.view;
 
+import za.ac.belgiumcampus.dao.SupplierDAO;
+import za.ac.belgiumcampus.model.Supplier;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.sql.SQLException;
+import java.util.List;
 
 
 /**
@@ -19,7 +26,81 @@ public class SupplierFrame extends javax.swing.JFrame {
      */
     public SupplierFrame() {
         initComponents();
+
+        // Add Supplier
+        jButton1.addActionListener(evt -> {
+            Supplier supplier = new Supplier(
+                    0,
+                    jTextField1.getText(),
+                    jTextField2.getText(),
+                    jTextField3.getText(),
+                    jTextField4.getText(),
+                    jTextField5.getText()
+            );
+            try {
+                new SupplierDAO().addSupplier(supplier);
+                JOptionPane.showMessageDialog(this, "Supplier added successfully!");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            }
+        });
+
+        // View Suppliers
+        jButton2.addActionListener(evt -> {
+            try {
+                List<Supplier> suppliers = new SupplierDAO().getAllSuppliers();
+                DefaultTableModel model = new DefaultTableModel(
+                        new String[]{"ID","Name","Contact","Phone","Email","Location"}, 0
+                );
+                for (Supplier s : suppliers) {
+                    model.addRow(new Object[]{
+                            s.getSupplierId(), s.getSupplierName(), s.getContactPerson(),
+                            s.getPhone(), s.getEmail(), s.getLocation()
+                    });
+                }
+                jTable1.setModel(model);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            }
+        });
+
+        // Update Supplier
+        jButton3.addActionListener(evt -> {
+            int row = jTable1.getSelectedRow();
+            if (row >= 0) {
+                int id = (int) jTable1.getValueAt(row, 0);
+                Supplier supplier = new Supplier(
+                        id,
+                        jTextField1.getText(),
+                        jTextField2.getText(),
+                        jTextField3.getText(),
+                        jTextField4.getText(),
+                        jTextField5.getText()
+                );
+                try {
+                    new SupplierDAO().updateSupplier(supplier);
+                    JOptionPane.showMessageDialog(this, "Supplier updated successfully!");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+                }
+            }
+        });
+
+        // Delete Supplier
+        jButton4.addActionListener(evt -> {
+            int row = jTable1.getSelectedRow();
+            if (row >= 0) {
+                int id = (int) jTable1.getValueAt(row, 0);
+                try {
+                    new SupplierDAO().deleteSupplier(id);
+                    JOptionPane.showMessageDialog(this, "Supplier deleted successfully!");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+                }
+            }
+        });
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -243,6 +324,8 @@ public class SupplierFrame extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new SupplierFrame().setVisible(true));
+
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

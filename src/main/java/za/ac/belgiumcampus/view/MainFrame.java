@@ -121,8 +121,15 @@ public class MainFrame extends JFrame {
             contentPanel.add(placeholderPanel("Materials (failed to load)"), CARD_MATERIALS);
         }
 
-        // TODO (Member 3): replace with the real SuppliersPanel
-        contentPanel.add(placeholderPanel("Suppliers"), CARD_SUPPLIERS);
+        // In MainFrame.buildContentArea()
+        try {
+            SupplierFrame supplierFrame = new SupplierFrame();
+            contentPanel.add(supplierFrame.getContentPane(), CARD_SUPPLIERS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            contentPanel.add(placeholderPanel("Suppliers (failed to load)"), CARD_SUPPLIERS);
+        }
+
 
         // TODO (Member 3): replace with the real CleanersPanel
         contentPanel.add(placeholderPanel("Cleaners"), CARD_CLEANERS);

@@ -25,7 +25,7 @@ public class Main {
                 // SupplierDAO opens its own connections; use its read methods
                 SupplierDAO supplierDAO = new SupplierDAO();
                 try {
-                    List<Supplier> suppliers = supplierDAO.getAllActive();
+                    List<Supplier> suppliers = supplierDAO.getAllSuppliers();
                     System.out.println("Suppliers: " + suppliers.size());
                 } catch (SQLException e) {
                     System.err.println("Failed to fetch suppliers: " + e.getMessage());

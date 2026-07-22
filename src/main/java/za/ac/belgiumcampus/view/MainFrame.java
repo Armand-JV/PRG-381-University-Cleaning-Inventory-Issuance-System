@@ -131,8 +131,14 @@ public class MainFrame extends JFrame {
         }
 
 
-        // TODO (Member 3): replace with the real CleanersPanel
-        contentPanel.add(placeholderPanel("Cleaners"), CARD_CLEANERS);
+        // Use the existing CleanerFrame UI inside the card (falls back to placeholder if it fails)
+        try {
+            CleanerFrame cleanerFrame = new CleanerFrame();
+            contentPanel.add(cleanerFrame.getContentPane(), CARD_CLEANERS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            contentPanel.add(placeholderPanel("Cleaners (failed to load)"), CARD_CLEANERS);
+        }
 
         // TODO (Member 4): replace with the real IssuancePanel
         contentPanel.add(placeholderPanel("Issuance"), CARD_ISSUANCE);

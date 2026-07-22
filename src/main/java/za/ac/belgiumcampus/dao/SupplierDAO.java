@@ -78,4 +78,29 @@ public class SupplierDAO {
         return suppliers;
     }
 
+    /**
+     * Used by the Materials Management "Supplier" dropdown, which should
+     * only offer suppliers that are still active.
+     */
+    public List<Supplier> getAllActive() throws SQLException {
+        String sql = "SELECT supplier_id, supplier_name, contact_person, phone, email, location "
+                + "FROM suppliers WHERE is_active = TRUE";
+        List<Supplier> suppliers = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                suppliers.add(new Supplier(
+                        rs.getInt("supplier_id"),
+                        rs.getString("supplier_name"),
+                        rs.getString("contact_person"),
+                        rs.getString("phone"),
+                        rs.getString("email"),
+                        rs.getString("location")
+                ));
+            }
+        }
+        return suppliers;
+    }
+
 }

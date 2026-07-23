@@ -75,7 +75,7 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel5.setToolTipText("");
         jLabel5.setName("lblStatus"); // NOI18N
 
-        jPanel1.setBackground(new java.awt.Color(0, 51, 204));
+        jPanel1.setBackground(new java.awt.Color(45, 62, 80));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));

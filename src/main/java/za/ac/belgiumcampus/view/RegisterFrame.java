@@ -89,7 +89,7 @@ public class RegisterFrame extends javax.swing.JFrame {
         jButton2.setName("btnCancel"); // NOI18N
         jButton2.addActionListener(this::btnCancelActionPerformed);
 
-        jPanel1.setBackground(new java.awt.Color(0, 51, 204));
+        jPanel1.setBackground(new java.awt.Color(45, 62, 80));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -195,7 +195,7 @@ public class RegisterFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        String fullName = jTextField1.getText().trim();
+    String fullName = jTextField1.getText().trim();
     String username = jTextField2.getText().trim();
     String email = jTextField3.getText().trim();
     String password = new String(jPasswordField1.getPassword());

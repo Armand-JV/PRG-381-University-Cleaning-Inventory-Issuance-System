@@ -46,6 +46,9 @@ public final class PasswordUtil {
      * Verifies a plain-text password against a previously stored
      * "salt:hash" string (as produced by {@link #hash(String)}).
      * Call this during login.
+     * @param plainTextPassword the password the user just typed in
+     * @param storedHash the "salt:hash" string previously saved in password_hash
+     * @return true if the password matches, false otherwise
      */
     public static boolean verify(String plainTextPassword, String storedHash) {
         if (storedHash == null || !storedHash.contains(":")) {
@@ -60,6 +63,16 @@ public final class PasswordUtil {
 
         return MessageDigest.isEqual(expectedHash, actualHash);
     }
+    
+    public static boolean isStrongEnough(String plainTextPassword) {
+    if (plainTextPassword == null || plainTextPassword.length() < 8) {
+        return false;
+    }
+    boolean hasUpper = plainTextPassword.chars().anyMatch(Character::isUpperCase);
+    boolean hasLower = plainTextPassword.chars().anyMatch(Character::isLowerCase);
+    boolean hasDigit = plainTextPassword.chars().anyMatch(Character::isDigit);
+    return hasUpper && hasLower && hasDigit;
+}
 
     private static byte[] generateSalt() {
         SecureRandom random = new SecureRandom();

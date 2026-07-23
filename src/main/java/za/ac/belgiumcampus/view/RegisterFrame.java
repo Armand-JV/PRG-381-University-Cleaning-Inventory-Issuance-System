@@ -180,7 +180,7 @@ public class RegisterFrame extends javax.swing.JFrame {
     String email = jTextField3.getText().trim();
     String password = new String(jPasswordField1.getPassword());
     String confirmPassword = new String(jPasswordField2.getPassword());
-    String role = (String) jComboBox1.getSelectedItem();
+    String role = "STOREKEEPER";
 
     if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
         javax.swing.JOptionPane.showMessageDialog(this,

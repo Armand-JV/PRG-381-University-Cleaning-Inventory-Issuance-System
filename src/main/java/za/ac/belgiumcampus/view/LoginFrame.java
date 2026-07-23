@@ -7,6 +7,7 @@ package za.ac.belgiumcampus.view;
 import za.ac.belgiumcampus.model.User;
 import za.ac.belgiumcampus.dao.UserDAO;
 import za.ac.belgiumcampus.util.PasswordUtil;
+import za.ac.belgiumcampus.util.SessionManager;
 
 /**
  *
@@ -153,7 +154,7 @@ public class LoginFrame extends javax.swing.JFrame {
             jLabel5.setText("Invalid username or password");
             return;
         }
-
+    SessionManager.login(user);
     jLabel5.setText(" ");
     
     // TODO: once MainFrame exists in za.ac.belgiumcampus.view, replace the

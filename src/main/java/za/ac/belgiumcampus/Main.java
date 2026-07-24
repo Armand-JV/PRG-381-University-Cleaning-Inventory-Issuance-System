@@ -72,7 +72,10 @@ public class Main {
                 } catch (SQLException e) {
                     System.err.println("Failed to list departments: " + e.getMessage());
                 }
-
+               
+                javax.swing.SwingUtilities.invokeLater(() ->
+                        new za.ac.belgiumcampus.view.LoginFrame().setVisible(true));
+                
             } else {
                 System.out.println("Database connection failed.");
             }

@@ -70,6 +70,11 @@ public class MaterialsFrame extends javax.swing.JFrame {
         restrictToNumeric(txtQuantity, false);
         restrictToNumeric(txtReorderLevel, false);
         restrictToNumeric(txtUnitPrice, true);
+
+        btnDelete.setEnabled(za.ac.belgiumcampus.util.AccessControl.canDelete());
+        if (!btnDelete.isEnabled()) {
+            btnDelete.setToolTipText("Only supervisors can delete materials.");
+        }
     }
 
     // ---------------------------------------------------------------
@@ -169,6 +174,10 @@ public class MaterialsFrame extends javax.swing.JFrame {
     }
 
     private void onDelete() {
+        if (!za.ac.belgiumcampus.util.AccessControl.canDelete()) {
+            setStatus("Only supervisors can delete materials.", true);
+            return;
+        }
         if (selectedMaterialId == null) {
             setStatus("Select a material in the table before deleting.", true);
             return;

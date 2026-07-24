@@ -40,13 +40,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 public class MainFrame extends JFrame {
-
-    // Card identifiers - used by both the sidebar buttons and CardLayout.show()
     private static final String CARD_DASHBOARD = "DASHBOARD";
     private static final String CARD_MATERIALS = "MATERIALS";
     private static final String CARD_SUPPLIERS = "SUPPLIERS";
     private static final String CARD_CLEANERS = "CLEANERS";
     private static final String CARD_ISSUANCE = "ISSUANCE";
+    private static final String CARD_REPORTS = "REPORTS";
 
     private final User loggedInUser;
 
@@ -85,6 +84,7 @@ public class MainFrame extends JFrame {
         sidebar.add(createNavButton("Suppliers", CARD_SUPPLIERS));
         sidebar.add(createNavButton("Cleaners", CARD_CLEANERS));
         sidebar.add(createNavButton("Issuance", CARD_ISSUANCE));
+        sidebar.add(createNavButton("Reports", CARD_REPORTS));
 
         sidebar.add(Box.createVerticalGlue());
 
@@ -109,8 +109,12 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
 
-        // TODO (Member 4): replace with the real DashboardPanel
-        contentPanel.add(placeholderPanel("Dashboard"), CARD_DASHBOARD);
+        try {
+            contentPanel.add(new DashboardPanel(), CARD_DASHBOARD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            contentPanel.add(placeholderPanel("Dashboard (failed to load)"), CARD_DASHBOARD);
+        }
 
         // Use the existing MaterialsFrame UI inside the card (falls back to placeholder if it fails)
         try {
@@ -140,8 +144,21 @@ public class MainFrame extends JFrame {
             contentPanel.add(placeholderPanel("Cleaners (failed to load)"), CARD_CLEANERS);
         }
 
-        // TODO (Member 4): replace with the real IssuancePanel
-        contentPanel.add(placeholderPanel("Issuance"), CARD_ISSUANCE);
+        try {
+            StockIssuanceFrame issuanceFrame = new StockIssuanceFrame(loggedInUser);
+            contentPanel.add(issuanceFrame.getContentPane(), CARD_ISSUANCE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            contentPanel.add(placeholderPanel("Issuance (failed to load)"), CARD_ISSUANCE);
+        }
+
+        try {
+            ReportsFrame reportsFrame = new ReportsFrame();
+            contentPanel.add(reportsFrame.getContentPane(), CARD_REPORTS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            contentPanel.add(placeholderPanel("Reports (failed to load)"), CARD_REPORTS);
+        }
 
         cardLayout.show(contentPanel, CARD_DASHBOARD);
         return contentPanel;

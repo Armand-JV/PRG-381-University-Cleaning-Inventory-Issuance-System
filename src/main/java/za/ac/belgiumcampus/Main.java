@@ -12,6 +12,7 @@ import za.ac.belgiumcampus.dao.MaterialDAO;
 import za.ac.belgiumcampus.dao.UserDAO;
 import za.ac.belgiumcampus.model.Supplier;
 import za.ac.belgiumcampus.model.Material;
+import za.ac.belgiumcampus.model.StockIssuance;
 import za.ac.belgiumcampus.model.User;
 
 public class Main {
@@ -22,7 +23,7 @@ public class Main {
                 DatabaseInitializer.runMigrations(conn);
                 System.out.println("Database schema is up to date.");
 
-                // SupplierDAO opens its own connections; use its read methods
+            
                 SupplierDAO supplierDAO = new SupplierDAO();
                 try {
                     List<Supplier> suppliers = supplierDAO.getAllSuppliers();
@@ -31,7 +32,7 @@ public class Main {
                     System.err.println("Failed to fetch suppliers: " + e.getMessage());
                 }
 
-                // Use CleanerDAO with the shared connection
+                
                 CleanerDAO cleanerDAO = new CleanerDAO(conn);
                 try {
                     cleanerDAO.listCleaners();
@@ -39,7 +40,7 @@ public class Main {
                     System.err.println("Failed to list cleaners: " + e.getMessage());
                 }
 
-                // MaterialDAO opens its own connections
+                
                 MaterialDAO materialDAO = new MaterialDAO();
                 try {
                     List<Material> materials = materialDAO.getAll();
@@ -57,9 +58,10 @@ public class Main {
                     System.err.println("Failed to check users: " + e.getMessage());
                 }
 
-                StockIssuanceDAO issuanceDAO = new StockIssuanceDAO(conn);
+                StockIssuanceDAO issuanceDAO = new StockIssuanceDAO();
                 try {
-                    issuanceDAO.listIssuances();
+                    List<StockIssuance> issuances = issuanceDAO.getAll();
+                    System.out.println("Stock issuances: " + issuances.size());
                 } catch (SQLException e) {
                     System.err.println("Failed to list issuances: " + e.getMessage());
                 }
